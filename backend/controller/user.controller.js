@@ -11,7 +11,7 @@ export const registerUser = async (req, res) => {
     // Check for all fields
     if (!name || !email || !password) {
       return res.status(400).json({
-        message: "Please fill all fields!",
+        message: "Please fill all the required fields!",
         success: false,
       });
     }
@@ -37,7 +37,7 @@ export const registerUser = async (req, res) => {
     await user.save();
 
     // Generate token
-    generateToken(email, res);
+    await generateToken(email, res);
 
     return res.status(200).json({
       success: true,
@@ -48,6 +48,56 @@ export const registerUser = async (req, res) => {
     console.error("Error during user registration:", err);
     return res.status(500).json({
       message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+//login user
+
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check for credentials
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all the required fields!",
+      });
+    }
+
+    const user = await UserModel.findOne({ email });
+
+    // Check for email
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is not registered!",
+      });
+    }
+
+    // Check for password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid password!",
+      });
+    }
+
+    await generateToken(email, res);
+
+    return res.status(200).json({
+      success: true,
+      message: "Login Successful!",
+      user: { name: user.name },
+    });
+  } catch (err) {
+    console.log("Error logging in user:", err.message);
+    return res.status(500).json({
+      message: "Internal server error!",
       success: false,
     });
   }
