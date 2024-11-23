@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import userRouter from "./routes/user.routes.js";
+import imageRouter from "./routes/image.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -16,6 +17,7 @@ app.use(cookieParser());
 //routes
 
 app.use("/api/user", userRouter);
+app.use("/api/image", imageRouter);
 
 connectDB().then(() => {
   app.listen(PORT, () => {
