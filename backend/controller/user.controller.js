@@ -126,3 +126,33 @@ export const logoutUser = async (req, res) => {
     });
   }
 };
+
+//login credit
+
+export const userCredit = async (req, res) => {
+  try {
+    const email = req.user.email;
+
+    console.log(email);
+
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User does not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      credits: user.creditBalance,
+      user: { name: user.name },
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
