@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 
+
 export const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
@@ -11,7 +12,6 @@ const AppContextProvider = ({ children }) => {
     const [showLogin, setShowLogin] = useState(false);
     const [credit, setCredit] = useState(false);
 
- 
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -34,6 +34,26 @@ const AppContextProvider = ({ children }) => {
     }
 
 
+    //generate image
+    const generateImage = async (prompt) => {
+        try {
+            const { data } = await axios.post(`${backendUrl}/api/image/generate-image`, { prompt }, { withCredentials: true });
+            if (data.success) {
+                setCredit(data.creditBalance)
+                return data.resultImage
+            } else {
+                toast.error(data.message)
+                loadCreditData()
+                if (data.creditBalance === 0) {
+                    toast.error(data.message)
+                }
+            }
+        } catch (err) {
+            toast.error(err.message);
+        }
+    }
+
+
     //logout
     const logout = async () => {
         try {
@@ -41,7 +61,7 @@ const AppContextProvider = ({ children }) => {
             if (data.success) {
                 setUser(null);
                 setCredit(null);
-                console.log("Logout successful");
+                toast.success(data.message)
             }
         } catch (err) {
             console.error("Logout Error:", err);
@@ -63,7 +83,9 @@ const AppContextProvider = ({ children }) => {
         backendUrl,
         credit,
         setCredit,
-        logout
+        logout,
+        generateImage,
+        loadCreditData
     }
     return (
         <AppContext.Provider value={value}>

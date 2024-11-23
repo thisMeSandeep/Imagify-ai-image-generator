@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { assets } from "../assets/assets.js"
 import { motion } from "framer-motion"
-
+import { AppContext } from "../context/AppContext.jsx"
 const Result = () => {
 
   const [image, setImage] = useState(assets.sample_img_1);
@@ -9,10 +9,23 @@ const Result = () => {
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState('');
 
+
+  const { generateImage } = useContext(AppContext);
+
   //input submit
 
-  const handleInputSubmit = () => {
-    console.log(input);
+  const handleInputSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true)
+
+    if (input) {
+      const image = await generateImage(input);
+      if (image) {
+        setImageLoaded(true);
+        setImage(image)
+      }
+    }
+    setLoading(false);
   }
 
   return (
@@ -41,7 +54,7 @@ const Result = () => {
           <input
             type="text"
             placeholder="Describe what you want to generate"
-            className="flex-1 bg-transparent outline-none ml-8 max-sm:w-20 placeholder-color"
+            className="flex-1 bg-transparent outline-none ml-8 max-sm:w-20  text-white"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
