@@ -93,6 +93,7 @@ export const loginUser = async (req, res) => {
       success: true,
       message: "Login Successful!",
       user: { name: user.name },
+      creditBalance: user.creditBalance,
     });
   } catch (err) {
     console.log("Error logging in user:", err.message);
@@ -107,7 +108,6 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
   try {
-    // Clear the 'token' cookie
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -127,7 +127,7 @@ export const logoutUser = async (req, res) => {
   }
 };
 
-//login credit
+//user credit
 
 export const userCredit = async (req, res) => {
   try {

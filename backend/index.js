@@ -10,8 +10,14 @@ import imageRouter from "./routes/image.routes.js";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+const corsOptions = {
+  // Your frontend URL (e.g., http://localhost:3000)
+  origin: process.env.CLIENT_URL,
+  credentials: true, // This allows the backend to send cookies
+};
+
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 //routes

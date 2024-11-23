@@ -6,11 +6,16 @@ import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
 
-    const { user, setShowLogin } = useContext(AppContext);
-
-
-
+    const { user, setShowLogin, logout, credit } = useContext(AppContext);
     const navigate = useNavigate();
+
+
+
+    //handle logout
+    const handleLogout = () => {
+        logout();
+        navigate("/")
+    };
 
     return (
         <div className="flex items-center justify-between py-4">
@@ -29,16 +34,16 @@ const Navbar = () => {
                                 onClick={() => navigate('/buy')}
                             >
                                 <img className="size-5" src={assets.credit_star} alt="" />
-                                <span className="text-xs sm:text-sm font-medium text-gray-600">Credit left : 50</span>
+                                <span className="text-xs sm:text-sm font-medium text-gray-600">Credit left : {credit}</span>
                             </button>
 
-                            <p className="text-gray-600 max-sm:hidden pl-4">Hi , Sandeep Singh</p>
+                            <p className="text-gray-600 max-sm:hidden pl-4">Hi , {user}</p>
 
                             <div className="relative group">
                                 <img src={assets.profile_icon} className="w-10 drop-shadow" alt="" />
                                 <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12">
                                     <ul className="list-none m-0 p-2 bg-white shadow-sm rounded-md border text-sm ">
-                                        <li className="py-1 px-2 cursor-pointer pr-10 ">Logout</li>
+                                        <li onClick={handleLogout} className="py-1 px-2 cursor-pointer pr-10 ">Logout</li>
                                     </ul>
                                 </div>
                             </div>
