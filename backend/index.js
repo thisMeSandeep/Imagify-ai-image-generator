@@ -11,9 +11,9 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 const corsOptions = {
-  // Your frontend URL (e.g., http://localhost:3000)
+  //  frontend URL 
   origin: process.env.CLIENT_URL,
-  credentials: true, // This allows the backend to send cookies
+  credentials: true, 
 };
 
 app.use(express.json());
