@@ -13,7 +13,7 @@ const userRouter = express.Router();
 
 userRouter.route("/register").post(registerUser);
 userRouter.route("/login").post(loginUser);
-userRouter.route("/logout").post(logoutUser);
+userRouter.route("/logout").post(auth,logoutUser);
 userRouter.route("/credits").get(auth, userCredit);
 userRouter.route("/pay-razor").post(auth, paymentRazorPay);
 userRouter.route("/verify-razor").post(auth, verifyRazorPay);

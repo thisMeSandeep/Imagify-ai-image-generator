@@ -24,19 +24,13 @@ const generateToken = async (email, res) => {
     // cookie options
     const options = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "development",
-      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 
     // Set the cookie in the response
     res.cookie("token", token, options);
-
-    // Send a response back
-    res.status(200).json({
-      success: true,
-      message: "Login successful",
-    });
   } catch (err) {
     console.log("Error generating token:", err.message);
     res.status(500).json({
