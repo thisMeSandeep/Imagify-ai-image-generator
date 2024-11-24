@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import UserModel from '../models/user.model.js';
+import jwt from "jsonwebtoken";
+import UserModel from "../models/user.model.js";
 
 const generateToken = async (email, res) => {
   try {
@@ -7,7 +7,7 @@ const generateToken = async (email, res) => {
     const user = await UserModel.findOne({ email });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     // Payload for JWT
@@ -18,28 +18,27 @@ const generateToken = async (email, res) => {
 
     // Sign the token
     const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-      expiresIn: '7d',
+      expiresIn: "7d",
     });
 
-    // Define cookie options
+    // cookie options
     const options = {
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
-      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict', 
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "development",
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 
     // Set the cookie in the response
-    res.cookie('token', token, options);
+    res.cookie("token", token, options);
 
     // Send a response back
     res.status(200).json({
       success: true,
-      message: 'Login successful',
+      message: "Login successful",
     });
-
   } catch (err) {
-    console.log('Error generating token:', err.message);
+    console.log("Error generating token:", err.message);
     res.status(500).json({
       success: false,
       message: err.message,

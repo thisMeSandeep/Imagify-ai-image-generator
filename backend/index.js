@@ -11,9 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 const corsOptions = {
-  //  frontend URL 
   origin: process.env.CLIENT_URL,
-  credentials: true, 
+  credentials: true,
 };
 
 app.use(express.json());
